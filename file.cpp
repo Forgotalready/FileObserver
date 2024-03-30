@@ -1,26 +1,47 @@
 #include "file.h"
 
-File::File() : QFile() {}
-
 File::File(QString &name)
-    : QFile(name)
+    : f(name)
 {}
 
-QString File::getSize() const
+FileState File::getState()
 {
-    int size = QFile::size();
-    QString str_size;
-    str_size.setNum(size);
-    return (str_size + QString(" bite"));
+    return f;
 }
 
-QString File::isExits() const
+FileState::FileState(QString &name)
+    :path (name)
 {
-    bool exits = QFile::exists();
+    QFileInfo q = QFileInfo(path);
+    is_Exists = q.exists();
+    size = static_cast<long long>(q.size());
+}
 
-    if(exits){
-        return QString(" exist");
+QString FileState::getPath()
+{
+    return path;
+}
+
+bool FileState::isExists()
+{
+    return is_Exists;
+}
+
+long long FileState::getSize()
+{
+    return size;
+}
+
+QString FileState::getFullInform()
+{
+    QString info = "";
+    if(is_Exists) {
+        info += (path + QString(" exists "));
+        QString s_size;
+        s_size.setNum(getSize());
+        info += (QString("size " + s_size));
     }else{
-        return QString(" not exist");
+        info = path + QString(" not exists ");
     }
+    return info;
 }

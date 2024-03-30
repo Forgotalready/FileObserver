@@ -8,9 +8,11 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     ILog* l = new ConsoleLog;
-    QString name = "C:\\qtprojects\\SoftwareDevelopmentLab1\\test.txt";
+    QString name = "D:\\QT\\Projects\\SoftwareDevelopmentLab1\\test.txt";
+    QString name1 = "ewklrfgjlkedfljg";
     File t(name);
-    l->log(t.getSize());
+    QString output; output.setNum(t.getState().getSize());
+    l->log(t.getState().getFullInform());
 
     return a.exec();
 }
