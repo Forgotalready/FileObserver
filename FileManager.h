@@ -4,6 +4,7 @@
 #include "ilog.h"
 #include "file.h"
 #include <QObject>
+#include <QRegExp>
 
 class FileManager : public QObject
 {
@@ -12,11 +13,16 @@ private:
     QVector<File*> trackFiles;
     ILog* logger;
     QVector<File*> changedFiles;
+
 public:
-    FileManager(ILog*);
+    explicit FileManager(ILog*);
     void updateFileState();
     void addFile(const QString& path);
     ~FileManager();
+
+private:
+    bool pathValid(const QString&);
+
 signals:
     void outputSignal(QVector<QString>&);
 public slots:

@@ -8,22 +8,22 @@ File::File(const QString &name)
     size = static_cast<long long>(q.size());
 }
 
-QString File::getPath()
+QString File::getPath() const
 {
     return path;
 }
 
-bool File::isExists()
+bool File::isExists() const
 {
     return exists;
 }
 
-long long File::getSize()
+long long File::getSize() const
 {
     return size;
 }
 
-QString File::getFullInform()
+QString File::getFullInform() const
 {
     QString info = "";
     if(exists) {

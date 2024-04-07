@@ -14,13 +14,13 @@ private:
     bool exists;
     long long size;
 public:
-    File();
-    File(const QString& name);
+    explicit File(const QString& name);
+    ~File() = default;
 
-    QString getPath();
-    bool isExists();
-    long long getSize();
-    QString getFullInform();
+    QString getPath()const;
+    bool isExists() const;
+    long long getSize() const;
+    QString getFullInform() const;
 
     void updateState();
 signals:

@@ -1,5 +1,11 @@
 #include "FileManager.h"
 
+bool FileManager::pathValid(const QString &path)
+{
+    QRegExp checkPath(QString("(.*):(\\\\.*)*(\..*)"));
+    return checkPath.exactMatch(path);
+}
+
 FileManager::FileManager(ILog *log)
 {
     logger = log;
@@ -26,12 +32,19 @@ void FileManager::updateFileState()
 
 void FileManager::addFile(const QString &path)
 {
-    File* t = new File(path);
-    connect(t,
-            &File::fileChange,
-            this,
-            &FileManager::fileChange);
-    trackFiles.push_back(t);
+    if(pathValid(path)){
+        File* t = new File(path);
+        connect(t,
+                &File::fileChange,
+                this,
+                &FileManager::fileChange);
+
+        logger->log(t->getPath() + QString(" added"));
+
+        trackFiles.push_back(t);
+    }else{
+        logger->log(path + QString(" incorrect"));
+    }
 }
 
 FileManager::~FileManager()

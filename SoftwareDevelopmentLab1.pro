@@ -8,6 +8,7 @@ CONFIG += c++17 cmdline
 
 SOURCES += \
         FileManager.cpp \
+        app.cpp \
         consolelog.cpp \
         file.cpp \
         ilog.cpp \
@@ -20,6 +21,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     FileManager.h \
+    app.h \
     consolelog.h \
     file.h \
     ilog.h
