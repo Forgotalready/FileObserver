@@ -3,28 +3,27 @@
 
 #include <QString>
 #include <QFileInfo>
+#include <QObject>
 
-class FileState{
+class File : public QObject
+{
+    Q_OBJECT
 private:
-    QString path;
     // Хранятся данные последнего опроса FileManager
-    bool is_Exists;
+    QString path;
+    bool exists;
     long long size;
 public:
-    FileState(QString& name);
+    File();
+    File(const QString& name);
+
     QString getPath();
     bool isExists();
     long long getSize();
     QString getFullInform();
-};
 
-class File
-{
-private:
-    FileState f;
-public:
-    File();
-    File(QString& name);
-    FileState getState();
+    void updateState();
+signals:
+    void fileChange(File*);
 };
 #endif // FILE_H

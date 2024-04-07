@@ -1,41 +1,32 @@
 #include "file.h"
 
-File::File(QString &name)
-    : f(name)
-{}
-
-FileState File::getState()
-{
-    return f;
-}
-
-FileState::FileState(QString &name)
-    :path (name)
+File::File(const QString &name)
+    : path(name)
 {
     QFileInfo q = QFileInfo(path);
-    is_Exists = q.exists();
+    exists = q.exists();
     size = static_cast<long long>(q.size());
 }
 
-QString FileState::getPath()
+QString File::getPath()
 {
     return path;
 }
 
-bool FileState::isExists()
+bool File::isExists()
 {
-    return is_Exists;
+    return exists;
 }
 
-long long FileState::getSize()
+long long File::getSize()
 {
     return size;
 }
 
-QString FileState::getFullInform()
+QString File::getFullInform()
 {
     QString info = "";
-    if(is_Exists) {
+    if(exists) {
         info += (path + QString(" exists "));
         QString s_size;
         s_size.setNum(getSize());
@@ -44,4 +35,19 @@ QString FileState::getFullInform()
         info = path + QString(" not exists ");
     }
     return info;
+}
+
+void File::updateState()
+{
+    //Получение текущего состояния файла.
+    QFileInfo q = QFileInfo(path);
+    bool nowExitsts = q.exists();
+    long long nowSize = static_cast<long long>(q.size());
+
+    if(nowExitsts != q.exists() || nowSize != size) {
+        exists = nowExitsts;
+        size = nowSize;
+        emit fileChange(this);
+    }
+
 }
