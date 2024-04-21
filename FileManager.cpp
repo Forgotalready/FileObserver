@@ -6,13 +6,19 @@ bool FileManager::pathValid(const QString &path)
     return checkPath.exactMatch(path);
 }
 
-FileManager::FileManager(ILog *log)
+FileManager::FileManager(ILog* log)
 {
-    logger = log;
-    connect(this,
-            &FileManager::outputSignal,
-            logger,
-            &ILog::notify);
+    logger = nullptr;
+
+    Q_ASSERT_X(logger !=  nullptr, "constructor FileManager", "Logger not initilize");
+
+    if(logger)
+        connect(this,
+                &FileManager::outputSignal,
+                logger,
+                &ILog::notify);
+    else
+        qWarning("constructor FileManager: Logger not initialized");
 }
 
 void FileManager::updateFileState()
@@ -32,18 +38,25 @@ void FileManager::updateFileState()
 
 void FileManager::addFile(const QString &path)
 {
+    Q_ASSERT_X(logger !=  nullptr, "addFile method FileManager", "Logger not initilize");
+
     if(pathValid(path)){
         File* t = new File(path);
         connect(t,
                 &File::fileChange,
                 this,
                 &FileManager::fileChange);
-
-        logger->log(t->getPath() + QString(" added"));
+        if(logger)
+            logger->log(t->getPath() + QString(" added"));
+        else
+            qWarning("addFile method FileManager: Logger not initialized");
 
         trackFiles.push_back(t);
     }else{
-        logger->log(path + QString(" incorrect"));
+        if(logger)
+            logger->log(path + QString(" incorrect"));
+        else
+            qWarning("addFile method FileManager: Logger not initialized");
     }
 }
 
