@@ -8,7 +8,7 @@ bool FileManager::pathValid(const QString &path)
 
 FileManager::FileManager(ILog* log)
 {
-    logger = nullptr;
+    logger = log;
 
     Q_ASSERT_X(logger !=  nullptr, "constructor FileManager", "Logger not initilize");
 
@@ -41,17 +41,23 @@ void FileManager::addFile(const QString &path)
     Q_ASSERT_X(logger !=  nullptr, "addFile method FileManager", "Logger not initilize");
 
     if(pathValid(path)){
-        File* t = new File(path);
-        connect(t,
-                &File::fileChange,
-                this,
-                &FileManager::fileChange);
+        File* t = new(std::nothrow) File(path);
+
+        Q_ASSERT_X(t != nullptr, "FileManager Add File method", "File not initilize, out of memory");
+
         if(logger)
             logger->log(t->getPath() + QString(" added"));
         else
             qWarning("addFile method FileManager: Logger not initialized");
-
-        trackFiles.push_back(t);
+        if(t){
+            connect(t,
+                    &File::fileChange,
+                    this,
+                    &FileManager::fileChange);
+            trackFiles.push_back(t);
+        }else{
+            qWarning("FileManager Add File method : File not initilize, out of memory");
+        }
     }else{
         if(logger)
             logger->log(path + QString(" incorrect"));

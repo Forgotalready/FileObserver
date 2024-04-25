@@ -6,7 +6,6 @@ QVector<QString> App::inputFilePath(ILog* l)
     if(l == nullptr)
         qWarning("App input method : Logger not initilize");
 
-    // А правильно ли это называть логированием, мы же с пользователем общаемся, а не логируем?
     if(l)
         l->log(QString("Input number files: "));
 

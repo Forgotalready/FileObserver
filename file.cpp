@@ -44,7 +44,7 @@ void File::updateState()
     bool nowExitsts = q.exists();
     long long nowSize = static_cast<long long>(q.size());
 
-    if(nowExitsts != q.exists() || nowSize != size) {
+    if(nowExitsts != exists || nowSize != size) {
         exists = nowExitsts;
         size = nowSize;
         emit fileChange(this);
