@@ -34,13 +34,13 @@ void App::start()
     auto paths = inputFilePath(l);
     //QString name = "D:\\QT\\Projects\\SoftwareDevelopmentLab1\\test.txt";
     //QString name1 = "ewklrfgjlkedfljg";
-    FileManager f(l);
+    FileManager::Instanse(l);
 
     for(auto x : paths)
-        f.addFile(x);
+        FileManager::Instanse(l).addFile(x);
 
     while(true){
-        f.updateFileState();
+        FileManager::Instanse(l).updateFileState();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 

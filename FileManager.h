@@ -14,11 +14,21 @@ private:
     ILog* logger;
     QVector<File*> changedFiles;
 
-public:
     explicit FileManager(ILog*);
+    FileManager(const FileManager&) = delete;
+    FileManager& operator=(const FileManager&) = delete;
+    ~FileManager();
+
+public:
+
+    static FileManager& Instanse(ILog* log){
+        static FileManager f(log);
+        return f;
+    }
+
     void updateFileState();
     void addFile(const QString& path);
-    ~FileManager();
+
 
 private:
     bool pathValid(const QString&);

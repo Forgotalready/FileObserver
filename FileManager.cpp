@@ -49,6 +49,7 @@ void FileManager::addFile(const QString &path)
             logger->log(t->getPath() + QString(" added"));
         else
             qWarning("addFile method FileManager: Logger not initialized");
+
         if(t){
             connect(t,
                     &File::fileChange,
