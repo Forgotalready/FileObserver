@@ -1,8 +1,8 @@
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
-#include "ilog.h"
-#include "file.h"
+#include "Logging\ilog.h"
+#include "File\file.h"
 #include <QObject>
 #include <QRegExp>
 

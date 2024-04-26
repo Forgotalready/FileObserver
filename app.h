@@ -1,10 +1,10 @@
 #ifndef APP_H
 #define APP_H
 
-#include "consolelog.h"
-#include "file.h"
+#include "Logging\consolelog.h"
+#include "File\file.h"
 #include<thread>
-#include "FileManager.h"
+#include "FileManager\FileManager.h"
 
 class App
 {
