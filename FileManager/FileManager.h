@@ -5,12 +5,13 @@
 #include "File\file.h"
 #include <QObject>
 #include <QRegExp>
+#include <set>
 
 class FileManager : public QObject
 {
     Q_OBJECT
 private:
-    QVector<File*> trackFiles;
+    std::set<File*> trackFiles;
     ILog* logger;
     QVector<File*> changedFiles;
 
@@ -28,10 +29,7 @@ public:
 
     void updateFileState();
     void addFile(const QString& path);
-
-
-private:
-    bool pathValid(const QString&);
+    void deleteFile(const QString& path);
 
 signals:
     void outputSignal(QVector<QString>&);

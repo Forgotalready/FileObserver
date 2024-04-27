@@ -1,11 +1,5 @@
 #include "FileManager.h"
 
-bool FileManager::pathValid(const QString &path)
-{
-    QRegExp checkPath(QString("(.*):(\\\\.*)*(\..*)"));
-    return checkPath.exactMatch(path);
-}
-
 FileManager::FileManager(ILog* log)
 {
     logger = log;
@@ -23,12 +17,12 @@ FileManager::FileManager(ILog* log)
 
 void FileManager::updateFileState()
 {
-    for(int i = 0;i < trackFiles.size();i++)
-        trackFiles[i]->updateState();
+    for(File* t : trackFiles)
+        t->updateState();
 
     QVector<QString> output;
-    for(int i = 0;i < changedFiles.size();i++)
-        output.push_back(trackFiles[i]->getFullInform());
+    for(File* t : changedFiles)
+        output.push_back(t->getFullInform());
 
     if(!changedFiles.empty()){
         emit outputSignal(output);
@@ -39,44 +33,47 @@ void FileManager::updateFileState()
 void FileManager::addFile(const QString &path)
 {
     Q_ASSERT_X(logger !=  nullptr, "addFile method FileManager", "Logger not initilize");
+    File* t = new(std::nothrow) File(path);
 
-    if(pathValid(path)){
-        File* t = new(std::nothrow) File(path);
+    Q_ASSERT_X(t != nullptr, "FileManager Add File method", "File not initilize, out of memory");
 
-        Q_ASSERT_X(t != nullptr, "FileManager Add File method", "File not initilize, out of memory");
+    if(logger)
+        logger->log(t->getPath() + QString(" added"));
+    else
+        qWarning("addFile method FileManager: Logger not initialized");
 
-        if(logger)
-            logger->log(t->getPath() + QString(" added"));
-        else
-            qWarning("addFile method FileManager: Logger not initialized");
-
-        if(t){
-            connect(t,
-                    &File::fileChange,
-                    this,
-                    &FileManager::fileChange);
-            trackFiles.push_back(t);
-        }else{
-            qWarning("FileManager Add File method : File not initilize, out of memory");
-        }
+    if(t){
+        connect(t,
+                &File::fileChange,
+                this,
+                &FileManager::fileChange);
+        trackFiles.insert(t);
     }else{
-        if(logger)
-            logger->log(path + QString(" incorrect"));
-        else
-            qWarning("addFile method FileManager: Logger not initialized");
+        qWarning("FileManager Add File method : File not initilize, out of memory");
+    }
+}
+
+void FileManager::deleteFile(const QString &path)
+{
+    auto elem = trackFiles.begin();
+    while(elem != trackFiles.end()){
+        if((*elem)->getPath() == path){
+            trackFiles.erase(elem);
+            break;
+        }
     }
 }
 
 FileManager::~FileManager()
 {
-    for(int i = 0;i < trackFiles.size();i++){
-        delete trackFiles[i];
-        trackFiles[i] = nullptr;
+    for(File* t : trackFiles){
+        delete t;
+        t = nullptr;
     }
 
-    for(int i = 0;i < changedFiles.size();i++){
-        delete changedFiles[i];
-        changedFiles[i] = nullptr;
+    for(File* t : trackFiles){
+        delete t;
+        t = nullptr;
     }
 }
 
