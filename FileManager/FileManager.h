@@ -5,13 +5,12 @@
 #include "File\file.h"
 #include <QObject>
 #include <QRegExp>
-#include <set>
 
 class FileManager : public QObject
 {
     Q_OBJECT
 private:
-    std::set<File*> trackFiles;
+    QVector<File*> trackFiles;
     ILog* logger;
     QVector<File*> changedFiles;
 

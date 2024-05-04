@@ -33,6 +33,14 @@ void FileManager::updateFileState()
 void FileManager::addFile(const QString &path)
 {
     Q_ASSERT_X(logger !=  nullptr, "addFile method FileManager", "Logger not initilize");
+
+    for(auto file : trackFiles){
+        if(file->getPath() == path){
+            qWarning("File already exists");
+            return;
+        }
+    }
+
     File* t = new(std::nothrow) File(path);
 
     Q_ASSERT_X(t != nullptr, "FileManager Add File method", "File not initilize, out of memory");
@@ -47,7 +55,7 @@ void FileManager::addFile(const QString &path)
                 &File::fileChange,
                 this,
                 &FileManager::fileChange);
-        trackFiles.insert(t);
+        trackFiles.push_back(t);
     }else{
         qWarning("FileManager Add File method : File not initilize, out of memory");
     }
