@@ -28,10 +28,7 @@ public:
 
     void updateFileState();
     void addFile(const QString& path);
-
-
-private:
-    bool pathValid(const QString&);
+    void deleteFile(const QString& path);
 
 signals:
     void outputSignal(QVector<QString>&);
